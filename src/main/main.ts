@@ -11,6 +11,7 @@
 import { app, BrowserWindow } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
+import { registerIpcHandlers } from './ipc-handlers';
 
 // Hot reload in development mode
 // This watches for file changes and reloads/restarts appropriately
@@ -163,6 +164,9 @@ function createWindow(): void {
 
 // App is ready - create the window
 app.whenReady().then(() => {
+  // Register IPC handlers before creating window
+  registerIpcHandlers();
+
   createWindow();
 
   // macOS: Re-create window when dock icon clicked and no windows exist
