@@ -10,6 +10,7 @@
 
 import { app, BrowserWindow } from 'electron';
 import * as path from 'path';
+import * as fs from 'fs';
 
 // Hot reload in development mode
 // This watches for file changes and reloads/restarts appropriately
@@ -27,14 +28,92 @@ if (process.env.NODE_ENV !== 'production') {
   }
 }
 
+/**
+ * Window State Persistence
+ *
+ * Electron apps can remember window position and size between sessions.
+ * We save this to a JSON file in the user's app data folder
+ * (e.g., ~/Library/Application Support/tic-tac-tao/).
+ */
+interface WindowState {
+  width: number;
+  height: number;
+  x?: number;
+  y?: number;
+  isMaximized?: boolean;
+}
+
+const DEFAULT_WINDOW_STATE: WindowState = {
+  width: 600,
+  height: 700,
+};
+
+/**
+ * Gets the path to the window state file.
+ */
+function getWindowStatePath(): string {
+  return path.join(app.getPath('userData'), 'window-state.json');
+}
+
+/**
+ * Loads the saved window state from disk.
+ */
+function loadWindowState(): WindowState {
+  try {
+    const statePath = getWindowStatePath();
+    if (fs.existsSync(statePath)) {
+      const data = fs.readFileSync(statePath, 'utf-8');
+      return { ...DEFAULT_WINDOW_STATE, ...JSON.parse(data) };
+    }
+  } catch (err) {
+    console.error('Failed to load window state:', err);
+  }
+  return DEFAULT_WINDOW_STATE;
+}
+
+/**
+ * Saves the window state to disk.
+ */
+function saveWindowState(state: WindowState): void {
+  try {
+    const statePath = getWindowStatePath();
+    fs.writeFileSync(statePath, JSON.stringify(state, null, 2));
+  } catch (err) {
+    console.error('Failed to save window state:', err);
+  }
+}
+
 // Keep a global reference to prevent garbage collection
 let mainWindow: BrowserWindow | null = null;
 
+/**
+ * Captures and saves the current window state.
+ */
+function captureWindowState(): void {
+  if (!mainWindow) return;
+
+  const bounds = mainWindow.getBounds();
+  const isMaximized = mainWindow.isMaximized();
+
+  saveWindowState({
+    width: bounds.width,
+    height: bounds.height,
+    x: bounds.x,
+    y: bounds.y,
+    isMaximized,
+  });
+}
+
 function createWindow(): void {
-  // Create the browser window
+  // Load saved window state
+  const windowState = loadWindowState();
+
+  // Create the browser window with saved state
   mainWindow = new BrowserWindow({
-    width: 600,
-    height: 700,
+    width: windowState.width,
+    height: windowState.height,
+    x: windowState.x,
+    y: windowState.y,
     minWidth: 400,
     minHeight: 500,
     title: 'Tic-Tac-Toe',
@@ -50,6 +129,16 @@ function createWindow(): void {
       preload: path.join(__dirname, 'preload.js'),
     },
   });
+
+  // Restore maximized state if it was maximized
+  if (windowState.isMaximized) {
+    mainWindow.maximize();
+  }
+
+  // Save window state when it changes
+  mainWindow.on('resize', captureWindowState);
+  mainWindow.on('move', captureWindowState);
+  mainWindow.on('close', captureWindowState);
 
   // Load the game UI
   mainWindow.loadFile(path.join(__dirname, '..', 'renderer', 'index.html'));
