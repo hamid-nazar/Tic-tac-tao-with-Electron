@@ -1,0 +1,80 @@
+{
+  "name": "tic-tac-tao",
+  "version": "0.1.0",
+  "description": "A professional Tic-Tac-Toe game built with Electron for macOS",
+  "main": "dist/main/main.js",
+  "private": true,
+  "author": {
+    "name": "Hamid Nazar",
+    "url": "https://github.com/hamid-nazar"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hamid-nazar/Tic-tac-tao-with-Electron.git"
+  },
+  "scripts": {
+    "start": "electron .",
+    "dev": "npm run build && concurrently -k \"npm run watch\" \"electron .\"",
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "format": "prettier --write \"src/**/*.{ts,html,css}\"",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "package": "electron-builder --mac --config electron-builder.config.js",
+    "package:dir": "electron-builder --mac --dir --config electron-builder.config.js",
+    "clean": "rm -rf dist release",
+    "rebuild": "npm run clean && npm run build",
+    "sync-tasks": "node scripts/sync-to-github-project.js"
+  },
+  "keywords": [
+    "electron",
+    "game",
+    "tic-tac-toe",
+    "macos",
+    "typescript"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "build": {
+    "appId": "com.hamidnazar.tictactao",
+    "productName": "Tic-Tac-Toe",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.games",
+      "icon": "assets/icon.icns",
+      "target": [
+        "dmg"
+      ]
+    },
+    "dmg": {
+      "title": "Tic-Tac-Toe",
+      "icon": "assets/icon.icns"
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^25.7.0",
+    "@typescript-eslint/eslint-plugin": "^8.59.3",
+    "@typescript-eslint/parser": "^8.59.3",
+    "concurrently": "^9.2.1",
+    "electron": "^42.0.1",
+    "electron-builder": "^26.8.1",
+    "electron-reload": "^2.0.0-alpha.1",
+    "eslint": "^10.3.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "prettier": "^3.8.3",
+    "typescript": "^6.0.3"
+  }
+}

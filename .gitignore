@@ -1,0 +1,68 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+out/
+*.tsbuildinfo
+
+# Keep build/ for electron-builder resources (icons, entitlements)
+# but ignore any generated files in it
+build/*.generated
+
+# Electron-builder output
+release/
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.p12
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+coverage/
+.nyc_output/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+
+# Optional npm cache
+.npm/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Electron packager/builder
+*.dmg
+*.app
+*.zip
+*.deb
+*.rpm
+*.AppImage
+
+# Files to exclude from version control
+scripts/sync-to-github-project.js
+project-tasks.json
+CLAUDE.md
