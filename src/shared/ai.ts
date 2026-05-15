@@ -8,7 +8,7 @@
  * - Hard: Minimax algorithm (unbeatable)
  */
 
-import { Board, Player, Position } from './types';
+import { Board, Difficulty, Player, Position } from './types';
 import { applyMoveToBoard, checkWin, getAvailableMoves, getOpponent, isBoardFull } from './game';
 
 /**
@@ -164,4 +164,64 @@ export function getHardAIMove(board: Board, aiPlayer: Player): Position | null {
   }
 
   return bestMove;
+}
+
+// ============================================
+// Medium AI: Mix of Random and Optimal
+// ============================================
+
+/**
+ * Medium AI: Uses a mix of optimal and random moves.
+ *
+ * Strategy:
+ * - 70% of the time: play the optimal move (minimax)
+ * - 30% of the time: play a random move
+ *
+ * This creates a challenging opponent that occasionally makes mistakes,
+ * giving players a chance to win while still being competitive.
+ *
+ * @param board - Current board state
+ * @param aiPlayer - The AI's player symbol (X or O)
+ * @returns The chosen position, or null if no moves available
+ */
+export function getMediumAIMove(board: Board, aiPlayer: Player): Position | null {
+  const availableMoves = getAvailableMoves(board);
+
+  if (availableMoves.length === 0) {
+    return null;
+  }
+
+  // 70% chance to play optimally, 30% chance to play randomly
+  const playOptimally = Math.random() < 0.7;
+
+  if (playOptimally) {
+    return getHardAIMove(board, aiPlayer);
+  } else {
+    return getRandomMove(board);
+  }
+}
+
+// ============================================
+// Unified AI Move Selector
+// ============================================
+
+/**
+ * Gets an AI move based on the selected difficulty.
+ *
+ * @param board - Current board state
+ * @param aiPlayer - The AI's player symbol (X or O)
+ * @param difficulty - The difficulty level (easy, medium, hard)
+ * @returns The chosen position, or null if no moves available
+ */
+export function getAIMove(board: Board, aiPlayer: Player, difficulty: Difficulty): Position | null {
+  switch (difficulty) {
+    case 'easy':
+      return getEasyAIMove(board);
+    case 'medium':
+      return getMediumAIMove(board, aiPlayer);
+    case 'hard':
+      return getHardAIMove(board, aiPlayer);
+    default:
+      return getEasyAIMove(board);
+  }
 }
