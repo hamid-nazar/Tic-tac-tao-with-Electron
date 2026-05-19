@@ -15,6 +15,24 @@
 import { Menu, shell, app, BrowserWindow, MenuItemConstructorOptions } from 'electron';
 
 /**
+ * Configures the native macOS About panel.
+ *
+ * The About panel is shown when users click "About Tic-Tac-Toe" in the app menu.
+ * It displays app information like version, copyright, and credits.
+ */
+export function setupAboutPanel(): void {
+  app.setAboutPanelOptions({
+    applicationName: 'Tic-Tac-Toe',
+    applicationVersion: app.getVersion(),
+    version: app.getVersion(), // Build number (same as version for now)
+    copyright: '© 2026 Hamid Nazar',
+    credits:
+      'Built with Electron as a learning project.\n\nAI opponent uses the minimax algorithm.',
+    website: 'https://github.com/hamid-nazar/Tic-tac-tao-with-Electron',
+  });
+}
+
+/**
  * Creates and sets the application menu.
  * Call this after the app is ready.
  */

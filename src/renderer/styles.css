@@ -1,0 +1,406 @@
+/**
+ * Tic-Tac-Toe Styles
+ *
+ * CSS Custom Properties (variables) for theming.
+ * Using variables makes it easy to:
+ * - Maintain consistent colors throughout the app
+ * - Implement dark/light themes later
+ * - Quickly adjust the design
+ */
+
+/* ============================================
+   CSS Variables - Design Tokens
+   ============================================ */
+:root {
+  /* Color Palette */
+  --color-background: #1a1a2e;
+  --color-surface: #16213e;
+  --color-surface-light: #1f3460;
+  --color-primary: #e94560;
+  --color-primary-hover: #ff6b6b;
+  --color-secondary: #0f3460;
+  --color-accent: #00d9ff;
+
+  /* Player Colors */
+  --color-x: #e94560;
+  --color-o: #00d9ff;
+
+  /* Text Colors */
+  --color-text: #eaeaea;
+  --color-text-muted: #a0a0a0;
+  --color-text-dark: #1a1a2e;
+
+  /* Status Colors */
+  --color-win: #4ade80;
+  --color-draw: #fbbf24;
+
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-round: 50%;
+
+  /* Typography */
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  --font-size-sm: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 20px;
+  --font-size-xl: 28px;
+  --font-size-2xl: 48px;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================
+   Base Styles & Reset
+   ============================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.5;
+  color: var(--color-text);
+  background-color: var(--color-background);
+  min-height: 100vh;
+  overflow: hidden; /* Prevent scrolling in Electron window */
+}
+
+/* ============================================
+   Typography
+   ============================================ */
+h1 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+}
+
+/* ============================================
+   Layout - App Container
+   ============================================ */
+#app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--spacing-lg);
+  gap: var(--spacing-lg);
+}
+
+/* ============================================
+   Header
+   ============================================ */
+.game-header {
+  text-align: center;
+}
+
+.game-header h1 {
+  color: var(--color-text);
+  margin-bottom: var(--spacing-xs);
+}
+
+.mode-indicator {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ============================================
+   Game Container
+   ============================================ */
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+/* ============================================
+   Game Status
+   ============================================ */
+.game-status {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  min-width: 200px;
+  text-align: center;
+}
+
+.game-status.winner {
+  background-color: var(--color-win);
+  color: var(--color-text-dark);
+}
+
+.game-status.draw {
+  background-color: var(--color-draw);
+  color: var(--color-text-dark);
+}
+
+/* ============================================
+   Game Board
+   ============================================ */
+.board-container {
+  padding: var(--spacing-md);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-sm);
+  width: 300px;
+  height: 300px;
+}
+
+/* ============================================
+   Board Cells
+   ============================================ */
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-surface-light);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: background-color var(--transition-fast),
+              transform var(--transition-fast);
+}
+
+.cell:hover:not(:disabled) {
+  background-color: var(--color-secondary);
+  transform: scale(1.02);
+}
+
+.cell:disabled {
+  cursor: not-allowed;
+}
+
+.cell[data-player="X"] {
+  color: var(--color-x);
+  animation: markerAppear 0.2s ease-out;
+}
+
+.cell[data-player="O"] {
+  color: var(--color-o);
+  animation: markerAppear 0.2s ease-out;
+}
+
+@keyframes markerAppear {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Board reset animation - markers shrink and fade out */
+.cell.resetting {
+  animation: markerDisappear 0.2s ease-in forwards;
+}
+
+@keyframes markerDisappear {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+.cell.winning {
+  animation: winningPulse 0.6s ease-in-out infinite alternate;
+  background-color: rgba(74, 222, 128, 0.2); /* Subtle green tint */
+}
+
+@keyframes winningPulse {
+  from {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 var(--color-win);
+  }
+  to {
+    transform: scale(1.08);
+    box-shadow: 0 0 25px 8px var(--color-win);
+  }
+}
+
+/* ============================================
+   Buttons
+   ============================================ */
+.btn {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background-color var(--transition-fast),
+              transform var(--transition-fast);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-text);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+}
+
+/* ============================================
+   Scoreboard
+   ============================================ */
+.scoreboard {
+  display: flex;
+  gap: var(--spacing-xl);
+  padding: var(--spacing-md) var(--spacing-xl);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+}
+
+.score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.score-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.score-value {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.score:first-child .score-value {
+  color: var(--color-x);
+}
+
+.score:last-child .score-value {
+  color: var(--color-o);
+}
+
+/* ============================================
+   Settings Panel
+   ============================================ */
+.settings-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--color-surface);
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  z-index: 100;
+}
+
+.settings-panel.hidden {
+  display: none;
+}
+
+.settings-panel h2 {
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+}
+
+.setting-group {
+  margin-bottom: var(--spacing-lg);
+}
+
+.setting-group > label {
+  display: block;
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text-muted);
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.radio-group label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  cursor: pointer;
+}
+
+.radio-group input[type="radio"] {
+  accent-color: var(--color-primary);
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+.hidden {
+  display: none !important;
+}

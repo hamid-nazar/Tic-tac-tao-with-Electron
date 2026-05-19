@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!--
+    Security: Content Security Policy
+    Restricts what resources can be loaded to prevent XSS attacks.
+    'self' = only load resources from same origin
+  -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tic-Tac-Toe</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Header: Game title and mode indicator -->
+    <header class="game-header">
+      <h1>Tic-Tac-Toe</h1>
+      <div id="mode-indicator" class="mode-indicator">Single Player</div>
+    </header>
+
+    <!-- Main game area -->
+    <main class="game-container">
+      <!-- Status display: whose turn / winner / draw -->
+      <section id="status" class="game-status" aria-live="polite">
+        <span id="status-text">X's turn</span>
+      </section>
+
+      <!-- The 3x3 game board -->
+      <section class="board-container">
+        <div id="board" class="board" role="grid" aria-label="Tic-Tac-Toe board">
+          <!--
+            Board cells: 9 cells in a 3x3 grid
+            Index mapping:
+              0 | 1 | 2
+              ---------
+              3 | 4 | 5
+              ---------
+              6 | 7 | 8
+          -->
+          <button class="cell" data-index="0" aria-label="Cell 1"></button>
+          <button class="cell" data-index="1" aria-label="Cell 2"></button>
+          <button class="cell" data-index="2" aria-label="Cell 3"></button>
+          <button class="cell" data-index="3" aria-label="Cell 4"></button>
+          <button class="cell" data-index="4" aria-label="Cell 5"></button>
+          <button class="cell" data-index="5" aria-label="Cell 6"></button>
+          <button class="cell" data-index="6" aria-label="Cell 7"></button>
+          <button class="cell" data-index="7" aria-label="Cell 8"></button>
+          <button class="cell" data-index="8" aria-label="Cell 9"></button>
+        </div>
+      </section>
+
+      <!-- Game controls -->
+      <section class="controls">
+        <button id="new-game-btn" class="btn btn-primary">New Game</button>
+      </section>
+    </main>
+
+    <!-- Score display -->
+    <aside class="scoreboard">
+      <div class="score">
+        <span class="score-label">X</span>
+        <span id="score-x" class="score-value">0</span>
+      </div>
+      <div class="score">
+        <span class="score-label">Draws</span>
+        <span id="score-draws" class="score-value">0</span>
+      </div>
+      <div class="score">
+        <span class="score-label">O</span>
+        <span id="score-o" class="score-value">0</span>
+      </div>
+    </aside>
+
+    <!-- Settings panel (hidden by default) -->
+    <aside id="settings-panel" class="settings-panel hidden">
+      <h2>Settings</h2>
+
+      <div class="setting-group">
+        <label>Game Mode</label>
+        <div class="radio-group">
+          <label>
+            <input type="radio" name="mode" value="single" checked>
+            Single Player
+          </label>
+          <label>
+            <input type="radio" name="mode" value="two-player">
+            Two Player
+          </label>
+        </div>
+      </div>
+
+      <div class="setting-group" id="difficulty-group">
+        <label>Difficulty</label>
+        <div class="radio-group">
+          <label>
+            <input type="radio" name="difficulty" value="easy">
+            Easy
+          </label>
+          <label>
+            <input type="radio" name="difficulty" value="medium" checked>
+            Medium
+          </label>
+          <label>
+            <input type="radio" name="difficulty" value="hard">
+            Hard
+          </label>
+        </div>
+      </div>
+
+      <div class="setting-group" id="player-choice-group">
+        <label>Play as</label>
+        <div class="radio-group">
+          <label>
+            <input type="radio" name="player" value="X" checked>
+            X (First)
+          </label>
+          <label>
+            <input type="radio" name="player" value="O">
+            O (Second)
+          </label>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Load renderer script -->
+  <script src="renderer.js"></script>
+</body>
+</html>

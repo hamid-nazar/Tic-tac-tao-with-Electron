@@ -12,7 +12,7 @@ import { app, BrowserWindow } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
 import { registerIpcHandlers } from './ipc-handlers';
-import { createAppMenu, createDockMenu } from './menu';
+import { createAppMenu, createDockMenu, setupAboutPanel } from './menu';
 
 // Hot reload in development mode
 // This watches for file changes and reloads/restarts appropriately
@@ -167,6 +167,9 @@ function createWindow(): void {
 app.whenReady().then(() => {
   // Register IPC handlers before creating window
   registerIpcHandlers();
+
+  // Configure the About panel (macOS)
+  setupAboutPanel();
 
   // Create native application menu
   createAppMenu();

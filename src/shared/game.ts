@@ -9,33 +9,13 @@
 import { Board, GameState, GameStatus, Move, Player, Position, Score } from './types';
 
 /**
- * All possible winning lines in Tic-Tac-Toe.
- *
- * Board positions:
+ * Board positions reference:
  *   0 | 1 | 2
  *   ---------
  *   3 | 4 | 5
  *   ---------
  *   6 | 7 | 8
- *
- * Winning combinations:
- * - Rows: [0,1,2], [3,4,5], [6,7,8]
- * - Columns: [0,3,6], [1,4,7], [2,5,8]
- * - Diagonals: [0,4,8], [2,4,6]
  */
-const WINNING_LINES: [Position, Position, Position][] = [
-  // Rows (horizontal)
-  [0, 1, 2],
-  [3, 4, 5],
-  [6, 7, 8],
-  // Columns (vertical)
-  [0, 3, 6],
-  [1, 4, 7],
-  [2, 5, 8],
-  // Diagonals
-  [0, 4, 8],
-  [2, 4, 6],
-];
 
 /**
  * Row indices for win checking.
