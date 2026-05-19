@@ -50,6 +50,56 @@ const settings: GameSettings = {
 };
 
 // ============================================
+// Audio - Web Audio API for sound effects
+// ============================================
+
+/**
+ * Web Audio API context (created lazily on first user interaction).
+ * Browsers require user interaction before playing audio.
+ */
+let audioContext: AudioContext | null = null;
+
+/**
+ * Gets or creates the AudioContext.
+ * Lazy initialization ensures we only create it after user interaction.
+ */
+function getAudioContext(): AudioContext {
+  if (!audioContext) {
+    audioContext = new AudioContext();
+  }
+  return audioContext;
+}
+
+/**
+ * Plays a short "pop" sound when placing a marker.
+ * Uses Web Audio API to generate a synthetic sound - no external files needed.
+ */
+function playMoveSound(): void {
+  const ctx = getAudioContext();
+
+  // Create oscillator for the tone
+  const oscillator = ctx.createOscillator();
+  const gainNode = ctx.createGain();
+
+  // Connect: oscillator -> gain -> output
+  oscillator.connect(gainNode);
+  gainNode.connect(ctx.destination);
+
+  // Configure sound: short "pop" at 600Hz
+  oscillator.frequency.value = 600;
+  oscillator.type = 'sine';
+
+  // Quick fade out for a clean "pop" sound
+  const now = ctx.currentTime;
+  gainNode.gain.setValueAtTime(0.3, now);
+  gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+
+  // Play for 100ms
+  oscillator.start(now);
+  oscillator.stop(now + 0.1);
+}
+
+// ============================================
 // Rendering Functions
 // ============================================
 
@@ -178,6 +228,7 @@ function handleCellClick(position: Position): void {
   const newState = makeMove(gameState, position);
   if (newState) {
     gameState = newState;
+    playMoveSound();
     render();
 
     // Check if game ended
@@ -208,6 +259,7 @@ function makeAIMove(): void {
     const newState = makeMove(gameState, aiMove);
     if (newState) {
       gameState = newState;
+      playMoveSound();
       render();
 
       if (gameState.status.state !== 'playing') {
